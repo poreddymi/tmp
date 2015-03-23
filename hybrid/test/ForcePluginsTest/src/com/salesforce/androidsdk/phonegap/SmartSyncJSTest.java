@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, salesforce.com, inc.
+ * Copyright (c) 2013-2015, salesforce.com, inc.
  * All rights reserved.
  * Redistribution and use of this software in source and binary forms, with or
  * without modification, are permitted provided that the following conditions
@@ -92,8 +92,11 @@ public class SmartSyncJSTest extends JSTestCase {
 				"testSObjectCollectionFetch",
 				"testSyncDown",
                 "testSyncDownWithNoOverwrite",
+                "testReSync",
 				"testSyncUpLocallyUpdated",
+				"testSyncUpLocallyUpdatedWithNoOverwrite",
 				"testSyncUpLocallyDeleted",
+				"testSyncUpLocallyDeletedWithNoOverwrite",
 				"testSyncUpLocallyCreated"
 				});
 	}
@@ -270,12 +273,24 @@ public class SmartSyncJSTest extends JSTestCase {
         runTest("testSyncDownWithNoOverwrite");
     }
 
+    public void testReSync() {
+        runTest("testReSync");
+    }
+
     public void testSyncUpLocallyUpdated() {
         runTest("testSyncUpLocallyUpdated");
     }
 
+    public void testSyncUpLocallyUpdatedWithNoOverwrite() {
+        runTest("testSyncUpLocallyUpdatedWithNoOverwrite");
+    }
+
     public void testSyncUpLocallyDeleted() {
         runTest("testSyncUpLocallyDeleted");
+    }
+
+    public void testSyncUpLocallyDeletedWithNoOverwrite() {
+        runTest("testSyncUpLocallyDeletedWithNoOverwrite");
     }
 
     public void testSyncUpLocallyCreated() {

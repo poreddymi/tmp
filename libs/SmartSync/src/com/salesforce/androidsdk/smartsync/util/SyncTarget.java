@@ -26,134 +26,19 @@
  */
 package com.salesforce.androidsdk.smartsync.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Target for sync u i.e. set of objects to download from server
+ * Target for sync down:
+ * - what records to download from server
+ * - how to download those records
  */
-public class SyncTarget {
-	
-	public static final String QUERY_TYPE = "type";
-	public static final String QUERY = "query";
-	public static final String FIELDLIST = "fieldlist";
-	public static final String SOBJECT_TYPE = "sobjectType";	
-	
-	private QueryType queryType;
-	private String query;
-	private List<String> fieldlist;
-	private String objectType;
-	
-	/**
-	 * Build SyncTarget from json
-	 * @param target as json
-	 * @return
-	 * @throws JSONException 
-	 */
-	public static SyncTarget fromJSON(JSONObject target) throws JSONException {
-		if (target == null)
-			return null;
-		
-		QueryType queryType = QueryType.valueOf(target.getString(QUERY_TYPE));
-		String query = target.optString(QUERY, null);
-		List<String> fieldlist = toList(target.optJSONArray(FIELDLIST));
-		String objectType = target.optString(SOBJECT_TYPE, null);
-		return new SyncTarget(queryType, query, fieldlist, objectType);
-	}
-
-	/**
-	 * Build SyncTarget for soql target
-	 * @param soql
-	 * @return
-	 */
-	public static SyncTarget targetForSOQLSyncDown(String soql) {
-		return new SyncTarget(QueryType.soql, soql, null, null);
-	}
-	
-	/**
-	 * Build SyncTarget for sosl target
-	 * @param soql
-	 * @return
-	 */
-	public static SyncTarget targetForSOSLSyncDown(String sosl) {
-		return new SyncTarget(QueryType.sosl, sosl, null, null);
-	}
-
-	/**
-	 * Build SyncTarget for mru target
-	 * @param objectType
-	 * @param fieldlist
-	 * @return
-	 */
-	public static SyncTarget targetForMRUSyncDown(String objectType, List<String> fieldlist) {
-		return new SyncTarget(QueryType.mru, null, fieldlist, objectType);
-	}
-	
-	/**
-	 * Private constructor
-	 * @param queryType
-	 * @param query
-	 * @param fieldlist
-	 * @param objectType
-	 */
-	private SyncTarget(QueryType queryType, String query, List<String> fieldlist, String objectType) {
-		this.queryType = queryType;
-		this.query = query;
-		this.fieldlist = fieldlist;
-		this.objectType = objectType;
-	}
-	
-	/**
-	 * @return json representation of target
-	 * @throws JSONException
-	 */
-	public JSONObject asJSON() throws JSONException {
-		JSONObject target = new JSONObject();
-		target.put(QUERY_TYPE, queryType.name());
-		if (query != null) target.put(QUERY, query);
-		if (fieldlist != null) target.put(FIELDLIST, new JSONArray(fieldlist));
-		if (objectType != null) target.put(SOBJECT_TYPE, objectType);
-		return target;
-	}
-
-	public QueryType getQueryType() {
-		return queryType;
-	}
-	
-	public String getQuery() {
-		return query;
-	}
-	
-	public List<String> getFieldlist() {
-		return fieldlist;
-	}
-	
-	public String getObjectType() {
-		return objectType;
-	}
-	
-	@SuppressWarnings("unchecked")
-	private static <T> List<T> toList(JSONArray jsonArray) throws JSONException {
-		if (jsonArray == null) {
-			return null;
-		}
-		List<T> arr = new ArrayList<T>();
-		for (int i=0; i<jsonArray.length(); i++) {
-			arr.add((T) jsonArray.get(i));
-		}
-		return arr;
-	}
+public interface SyncTarget {
 
     /**
-     * Enum for query type
+     * @return json representation of target
+     * @throws JSONException
      */
-    public enum QueryType {
-    	mru,
-    	sosl,
-    	soql
-    }
+    public JSONObject asJSON() throws JSONException;
 }
